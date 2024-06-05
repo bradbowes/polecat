@@ -85,7 +85,7 @@
    (tokens basic-tokens punct-tokens operator-tokens keyword-tokens)
    (grammar
     [prog
-     [(defs) $1]]
+     [(defs) `(,@$1 (main))]]
     [defs
      [(def) (list $1)]
      [(def defs) (cons $1 $2)]]
