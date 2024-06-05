@@ -1,0 +1,46 @@
+#lang reader "polecat.rkt"
+
+(* testing the language *)
+
+fib (n) =
+   if n < 2 then n
+   else fib (n - 2) + fib (n - 1)
+
+pow (m, n) =
+   if n = 0 then 1    
+   else m * pow (m, n - 1)
+
+second (ls) = first (rest (ls))
+
+reverse (ls) =
+   let
+      f (ls, acc) =
+         if empty (ls) then acc
+         else f (rest (ls), cons (first (ls), acc))
+   in
+      f (ls, [])
+
+fibs (n) =
+   let
+      f (c, acc) =
+         if c > n then acc
+         else if c >= 2 then f (c + 1, cons (first (acc) + second (acc), acc))
+         else f (c + 1, cons (c, acc))
+   in
+      reverse (f (0, []))
+
+_ = println (fibs (pow (5, 2)))
+
+ls = [1, 2, 3, 3 + 1, 3 + 2]
+
+fold (f, init, ls) =
+   let
+      g (acc, ls) =
+         if empty (ls) then acc
+         else g (f (first (ls), acc), rest(ls))
+   in
+      g (init, ls)
+
+sum (ls) = fold (lambda (m, n) -> m + n, 0, ls)
+
+_ = println (sum (ls))
