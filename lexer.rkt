@@ -13,8 +13,8 @@
 
 (define-tokens value-tokens (id num string sym typo))
 (define-empty-tokens tokens
-  (eof colon semicolon comma lparen rparen lbracket rbracket pipe mapsto
-   dot eq gt lt ge le ne plus minus times div mod assign
+  (begin eof colon semicolon comma lparen rparen lbracket rbracket pipe mapsto
+   cons dot eq gt lt ge le ne plus minus times div mod assign
    and case else end if in lambda let of or then type wildcard))
 
 (define lex
@@ -25,6 +25,7 @@
    [(:: "(*" (complement (:: any-string "*)" any-string)) "*)")
     (return-without-pos (lex input-port))]
    [":" (token-colon)]
+   ["::" (token-cons)]
    [";" (token-semicolon)]
    ["," (token-comma)]
    ["." (token-dot)]
@@ -48,6 +49,7 @@
    [":=" (token-assign)]
    ["_" (token-wildcard)]
    ["and" (token-and)]
+   ["begin" (token-begin)]
    ["case" (token-case)]
    ["else" (token-else)]
    ["end" (token-end)]

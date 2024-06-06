@@ -2,16 +2,18 @@
 
 (***** testing polecat language features *****)
 
-main () = (
-   println ("Testing Polecat Lanuage Features
---------------------------------");
+main () = begin
+   println ("Testing Polecat Language Features
+---------------------------------");
    println ("bignum:");
    println (pow (2, 100));
    println ("recursion, closure:");
-   let ls = fibs(50) in (
+   let ls = fibs (50) in begin
       println (ls);
       println ("lambda, higher order function:");
-      println (sum(ls))))
+      println (sum (ls))
+      end
+end
 
 pow (m, n) =
    if n = 0 then 1
@@ -21,8 +23,8 @@ fibs (n) =
    let
       f (c, acc) =
          if c > n then acc
-         else if c >= 2 then f (c + 1, cons (first (acc) + second (acc), acc))
-         else f (c + 1, cons (c, acc))
+         else if c >= 2 then f (c + 1, first (acc) + second (acc) :: acc)
+         else f (c + 1, c :: acc)
    in
       reverse (f (0, []))
 
@@ -32,7 +34,7 @@ reverse (ls) =
    let
       f (ls, acc) =
          if empty (ls) then acc
-         else f (rest (ls), cons (first (ls), acc))
+         else f (rest (ls), first (ls) :: acc)
    in
       f (ls, [])
 

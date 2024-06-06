@@ -51,7 +51,7 @@
      [(let vals in expr) `(letrec ,$2 ,$4)]
      [(lambda signature mapsto expr) `(lambda ,$2 ,$4)]
      [(case expr of clauses end) `(case ,$2 ,$4)]
-     [(lparen seq rparen) `(begin ,@$2)]
+     [(begin seq end) `(begin ,@$2)]
      ]
     [vals
      [(val) (list $1)]
@@ -59,7 +59,7 @@
     [val
      [(proto eq expr) (if (symbol? $1) (list $1 $3) `(,(car $1) (lambda ,@(cdr $1) ,$3)))]]
     [seq
-     [(expr semicolon expr) (list $1 $3)]
+     [(expr) (list $1)]
      [(expr semicolon seq) (cons $1 $3)]]
     [clauses
      [(clause) (list $1)]
@@ -72,27 +72,31 @@
      [(wildcard) '()]]
     [disjunction
      [(conjunction) $1]
-     [(conjunction or disjunction) `(or ,$1 ,$3)]]
+     [(disjunction or conjunction) `(or ,$1 ,$3)]]
     [conjunction
-     [(boolean) $1]
-     [(boolean and conjunction) `(and ,$1 ,$3)]]
-    [boolean
+     [(comparison) $1]
+     [(conjunction and comparison) `(and ,$1 ,$3)]]
+    [comparison
+     [(composition) $1]
+     [(composition eq composition) `(= ,$1 ,$3)]
+     [(composition gt composition) `(> ,$1 ,$3)]
+     [(composition ge composition) `(>= ,$1 ,$3)]
+     [(composition lt composition) `(< ,$1 ,$3)]
+     [(composition le composition) `(<= ,$1 ,$3)]
+     [(composition ne composition) `(<> ,$1 ,$3)]]
+    [composition
      [(sum) $1]
-     [(sum eq sum) `(= ,$1 ,$3)]
-     [(sum gt sum) `(> ,$1 ,$3)]
-     [(sum ge sum) `(>= ,$1 ,$3)]
-     [(sum lt sum) `(< ,$1 ,$3)]
-     [(sum le sum) `(<= ,$1 ,$3)]
-     [(sum ne sum) `(<> ,$1 ,$3)]]
+     [(sum cons composition) `(:: ,$1 ,$3)]
+     ]
     [sum
      [(product) $1]
-     [(product plus sum) `(+ ,$1 ,$3)]
-     [(product minus sum) `(- ,$1 ,$3)]]
+     [(sum plus product) `(+ ,$1 ,$3)]
+     [(sum minus product) `(- ,$1 ,$3)]]
     [product
      [(factor) $1]
-     [(factor times product) `(* ,$1 ,$3)]
-     [(factor div product) `(/ ,$1 ,$3)]
-     [(factor mod product) `(% ,$1 ,$3)]]
+     [(product times factor) `(* ,$1 ,$3)]
+     [(product div factor) `(/ ,$1 ,$3)]
+     [(product mod factor) `(% ,$1 ,$3)]]
     [factor
      [(num) $1]
      [(id) $1]
@@ -116,3 +120,4 @@
    (parse (lambda () (lex port))))
 
 (provide polecat-parse)
+
