@@ -1,16 +1,16 @@
 #lang reader "polecat.rkt"
 
-(***** testing polecat language features *****)
+(***** testing polecat language *****)
 
 main () = begin
-   println ("Testing Polecat Language Features
----------------------------------");
-   println ("bignum:");
+   println ("Testing Polecat Language\n" .. 
+            "------------------------");
+   println ("\nbignum:");
    println (pow (2, 100));
-   println ("recursion, closure:");
+   println ("\nrecursion, nested procedure:");
    let ls = fibs (50) in begin
       println (ls);
-      println ("lambda, higher order function:");
+      println ("\nlambda, higher order procedure:");
       println (sum (ls))
       end
 end

@@ -17,4 +17,5 @@
 ; (provide #%module-begin)
 (provide read-syntax define letrec lambda if begin + - * / = < > >= <= 
          void #%app #%datum list first rest)
-(provide (rename-out [display print] [displayln println] [null? empty] [cons ::]))
+(provide (rename-out [display print] [displayln println] [null? empty]
+                     [cons ::] [string-append ..]))

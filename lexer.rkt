@@ -14,7 +14,7 @@
 (define-tokens value-tokens (id num string sym typo))
 (define-empty-tokens tokens
   (begin eof colon semicolon comma lparen rparen lbracket rbracket pipe mapsto
-   cons dot eq gt lt ge le ne plus minus times div mod assign
+   cat cons dot eq gt lt ge le ne plus minus times div mod assign
    and case else end if in lambda let of or then type wildcard))
 
 (define lex
@@ -29,6 +29,7 @@
    [";" (token-semicolon)]
    ["," (token-comma)]
    ["." (token-dot)]
+   [".." (token-cat)]
    ["=" (token-eq)]
    [">" (token-gt)]
    ["<" (token-lt)]

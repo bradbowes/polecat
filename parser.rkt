@@ -91,7 +91,8 @@
     [sum
      [(product) $1]
      [(sum plus product) `(+ ,$1 ,$3)]
-     [(sum minus product) `(- ,$1 ,$3)]]
+     [(sum minus product) `(- ,$1 ,$3)]
+     [(sum cat product) `(.. ,$1 ,$3)]]
     [product
      [(factor) $1]
      [(product times factor) `(* ,$1 ,$3)]
