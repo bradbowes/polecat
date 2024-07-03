@@ -1,4 +1,4 @@
-#lang reader "polecat.rkt"
+#lang polecat
 
 (***** testing polecat language *****)
 a = ("Edmonton", "Alberta", 1)

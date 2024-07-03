@@ -1,7 +1,7 @@
 #lang racket
 
 (require parser-tools/yacc)
-(require "lexer.rkt")
+(require polecat/lexer)
 
 (define parse
   (parser

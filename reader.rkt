@@ -1,11 +1,10 @@
 #lang racket
-(require racket/runtime-config)
-(require "parser.rkt")
+(require polecat/parser)
 
 (define (read-syntax path port)
   (let*
       ((data (polecat-parse port))
-       (module-data `(module polecat-module "polecat.rkt" ,@data)))
+       (module-data `(module polecat-module polecat/reader ,@data)))
     (datum->syntax #f module-data)))
 
 (define-syntax-rule (module-begin form ...)
