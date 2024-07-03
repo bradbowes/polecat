@@ -1,5 +1,5 @@
 #lang racket
-
+(require racket/runtime-config)
 (require "parser.rkt")
 
 (define (read-syntax path port)
@@ -13,9 +13,13 @@
      form ...))
 
 (provide (rename-out [module-begin #%module-begin]))
-
+(provide #%top-interaction)
 ; (provide #%module-begin)
 (provide read-syntax define letrec lambda if begin + - * / = < > >= <= 
          void #%app #%datum list first rest)
-(provide (rename-out [display print] [displayln println] [null? empty]
-                     [cons ::] [string-append ..]))
+(provide (rename-out [display print]
+                     [displayln println]
+                     [null? empty]
+                     [cons ::]
+                     [string-append ^]
+                     [vector-ref field]))

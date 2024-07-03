@@ -19,14 +19,14 @@
    (tokens value-tokens tokens)
    (grammar
     [prog
-     [(defs) `(,@$1 (main))]]
+     [(defs) $1]]
     [defs
      [(def) (list $1)]
      [(def defs) (cons $1 $2)]]
     [def
-     [(proto eq expr) (if (symbol? $1) `(define ,$1 ,$3) `(define ,(car $1) (lambda ,@(cdr $1) ,$3)))]]
+     [(proto eq expr) (if (symbol? $1) `(define ,$1 ,$3) `(define ,(car $1) (lambda ,@(cdr $1) ,$3)))]
+     [(wildcard eq expr) $3]]
     [proto
-     [(wildcard) (gensym "#@")]
      [(arg) $1]
      [(id signature) (list $1 $2)]]
     [signature
@@ -92,7 +92,7 @@
      [(product) $1]
      [(sum plus product) `(+ ,$1 ,$3)]
      [(sum minus product) `(- ,$1 ,$3)]
-     [(sum cat product) `(.. ,$1 ,$3)]]
+     [(sum cat product) `(^ ,$1 ,$3)]]
     [product
      [(factor) $1]
      [(product times factor) `(* ,$1 ,$3)]
@@ -106,8 +106,10 @@
      [(sym) `(sym ,$1)]
      [(id lparen exprs rparen) (cons $1 $3)]
      [(lparen expr rparen) $2]
+     [(lparen tuple rparen) (list->vector $2)]
      [(lbracket exprs rbracket) `(list ,@$2)]
-     [(factor dot id) `(member ,$1 ,$3)]
+     ;[(factor dot id) `(member ,$1 ,$3)]
+     [(factor dot num) `(field ,$1 ,(- $3 1))]
      [(factor lbracket expr rbracket) `(index ,$1 ,$3)] ]
     [exprs
      [() '()]
@@ -115,6 +117,9 @@
     [exprlist
      [(expr) (list $1)]
      [(expr comma exprlist) (cons $1 $3)]]
+    [tuple
+     [(expr comma expr) (list $1 $3)]
+     [(expr comma tuple) (cons $1 $3)]]
     )))
 
 (define (polecat-parse port)

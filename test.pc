@@ -1,9 +1,19 @@
 #lang reader "polecat.rkt"
 
 (***** testing polecat language *****)
+a = ("Edmonton", "Alberta", 1)
+b = a.1
+c = a.2
+d = a.3
+
+m = let
+       a = 10
+       b = 20
+    in
+       a + b
 
 main () = begin
-   println ("Testing Polecat Language\n" .. 
+   println ("Testing Polecat Language\n" ^
             "------------------------");
    println ("\nbignum:");
    println (pow (2, 100));
@@ -12,7 +22,7 @@ main () = begin
       println (ls);
       println ("\nlambda, higher order procedure:");
       println (sum (ls))
-      end
+   end
 end
 
 pow (m, n) =
@@ -47,3 +57,5 @@ fold (f, init, ls) =
       g (init, ls)
 
 sum (ls) = fold (lambda (m, n) -> m + n, 0, ls)
+
+_ = main ()

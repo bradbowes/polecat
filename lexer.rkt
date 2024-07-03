@@ -29,7 +29,7 @@
    [";" (token-semicolon)]
    ["," (token-comma)]
    ["." (token-dot)]
-   [".." (token-cat)]
+   ["^" (token-cat)]
    ["=" (token-eq)]
    [">" (token-gt)]
    ["<" (token-lt)]
