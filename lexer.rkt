@@ -11,7 +11,7 @@
   (define p (open-input-string (~a s)))
   (read p))
 
-(define-tokens value-tokens (id num string sym typo))
+(define-tokens value-tokens (id num string bool sym typo))
 (define-empty-tokens tokens
   (begin eof colon semicolon comma lparen rparen lbracket rbracket pipe mapsto
    cat cons dot eq gt lt ge le ne plus minus times div mod assign
@@ -45,7 +45,7 @@
    ["-" (token-minus)]
    ["*" (token-times)]
    ["/" (token-div)]
-   ["%" (token-mod)]
+   ["mod" (token-mod)]
    ["->" (token-mapsto)]
    [":=" (token-assign)]
    ["_" (token-wildcard)]
@@ -54,6 +54,7 @@
    ["case" (token-case)]
    ["else" (token-else)]
    ["end" (token-end)]
+   ["false" (token-bool #f)]
    ["if" (token-if)]
    ["in" (token-in)]
    ["lambda" (token-lambda)]
@@ -61,6 +62,7 @@
    ["of" (token-of)]
    ["or" (token-or)]
    ["then" (token-then)]
+   ["true" (token-bool #t)]
    ["type" (token-type)]
    [name (token-id (string->symbol lexeme))]
    [(:: "#" name) (token-sym (string->symbol (substring lexeme 1)))]
