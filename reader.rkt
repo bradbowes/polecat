@@ -34,21 +34,27 @@
     [(_ f ()) (f)]
     [(_ f (arg ...)) (f arg ...)]))
 
-
 (define-syntax @lambda
-  (syntax-rules (@annot)
-    [(_ (@annot ((@annot id ty) ...) ret) body) (lambda (id ...) body)]))
+  (syntax-rules (@fun @var)
+    [(_ (@fun ((@var id ty) ...) ret) body) (lambda (id ...) body)]))
 
-(define-syntax @define
-  (syntax-rules (@annot)
-    [(_ (@annot id ty) value) (define id value)]
-    [(_ id value) (define id value)]))
+(define-syntax @vardecl
+  (syntax-rules (@var)
+    [(_ (@var id ty) value) (define id value)]))
 
+(define-syntax @fundecl
+  (syntax-rules (@fun @var)
+    [(_ (name (@fun () ret)) body) (define (name) body)]
+    [(_ (name (@fun ((@var id ty) ...) ret)) body) (define (name id ...) body)]))
 
-(provide @tuple @num @bool @id @string @sym @app @lambda @define)
+(define-syntax @let
+  (syntax-rules ()
+    [(_ (def ...) body) ((lambda () def ... body))]))
+
+(provide @tuple @num @bool @id @string @sym @app @lambda @fundecl @vardecl @let)
 (provide (rename-out [module-begin #%module-begin]))
 (provide #%top-interaction)
-; (provide #%module-begin)
+
 (provide read-syntax + - * / < > >= <= eq?
          #%app #%datum first rest)
 (provide (rename-out [display print]
@@ -57,10 +63,6 @@
                      [cons ::]
                      [string-append ^]
                      [vector-ref @field]
-                     [void @unit]
-                     ;[define @define]
-                     ;[lambda @lambda]
-                     [letrec @letrec]
                      [if @if]
                      [begin @begin]
                      [list @list]))

@@ -16,24 +16,24 @@
                          (position-line start-pos)
                          (position-col start-pos)))
                 (display "error\n"))))
+   ;(debug "polecat-parser.debug")
    (tokens value-tokens tokens)
    (grammar
     [prog
      [(defs) $1]]
     [defs
-     [(def) (list $1)]
-     [(def defs) (cons $1 $2)]]
+      [(def) (list $1)]
+      [(def defs) (cons $1 $2)]]
     [def
-     [(proto eq expr) (if (eq? (car $1) '@annot) `(@define ,$1 ,$3) `(@define ,(car $1) (@lambda ,@(cdr $1) ,$3)))]
-     [(wildcard eq expr) $3]]
+      [(id signature eq expr) `(@fundecl ,(list $1 $2) ,$4)]
+      [(arg eq expr) `(@vardecl ,$1 ,$3)]
+      [(wildcard eq expr) $3]]
     [proto
      [(arg) $1]
      [(id signature) (list $1 $2)]]
     [signature
-     [(args) `(@annot ,$1 ?)]
-     [(args colon id) `(@annot ,$1 ,$3)]]
-     ;[(args) $1]
-     ;[(args colon id) $1]]
+     [(args) `(@fun ,$1 ?)]
+     [(args colon id) `(@fun ,$1 ,$3)]]
     [args
      [(lparen rparen) '()]
      [(lparen arglist rparen) $2]]
@@ -41,23 +41,15 @@
      [(arg) (list $1)]
      [(arg comma arglist) (cons $1 $3)]]
     [arg
-     [(id) `(@annot ,$1 ?)]
-     [(id colon id) `(@annot ,$1 ,$3)]]
-     ;[(id) $1]
-     ;[(id colon id) $1]]
+     [(id) `(@var ,$1 ?)]
+     [(id colon id) `(@var ,$1 ,$3)]]
     [expr
      [(disjunction) $1]
      [(if expr then expr else expr) `(@if ,$2 ,$4 ,$6)]
-     [(let vals in expr) `(@letrec ,$2 ,$4)]
+     [(let defs in expr) `(@let ,$2 ,$4)]
      [(lambda signature mapsto expr) `(@lambda ,$2 ,$4)]
      [(case expr of clauses end) `(@case ,$2 ,$4)]
-     [(begin seq end) `(@begin ,@$2)]
-     ]
-    [vals
-     [(val) (list $1)]
-     [(val vals) (cons $1 $2)]]
-    [val
-     [(proto eq expr) (if (symbol? $1) (list $1 $3) `(,(car $1) (@lambda ,@(cdr $1) ,$3)))]]
+     [(begin seq end) `(@begin ,@$2)]]
     [seq
      [(expr) (list $1)]
      [(expr semicolon seq) (cons $1 $3)]]
@@ -86,8 +78,7 @@
      [(composition ne composition) `(<> ,$1 ,$3)]]
     [composition
      [(sum) $1]
-     [(sum cons composition) `(:: ,$1 ,$3)]
-     ]
+     [(sum cons composition) `(:: ,$1 ,$3)]]
     [sum
      [(product) $1]
      [(sum plus product) `(+ ,$1 ,$3)]
@@ -111,7 +102,8 @@
      [(lbracket exprs rbracket) `(@list ,@$2)]
      ;[(factor dot id) `(member ,$1 ,$3)]
      [(factor dot num) `(@field ,$1 ,(- $3 1))]
-     [(factor lbracket expr rbracket) `(@index ,$1 ,$3)] ]
+     ;[(factor lbracket expr rbracket) `(@index ,$1 ,$3)]
+     ]
     [exprs
      [() '()]
      [(exprlist) $1]]

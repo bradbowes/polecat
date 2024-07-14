@@ -18,6 +18,7 @@ main () = begin
    println ("\nbignum:");
    println (pow (2, 100));
    println ("\nrecursion, nested procedure:");
+
    let ls = fibs (50) in begin
       println (ls);
       println ("\nlambda, higher order procedure:");
