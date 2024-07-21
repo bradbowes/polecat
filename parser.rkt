@@ -96,7 +96,7 @@
      [(lparen rparen) '(@unit)]
      [(string) `(@string ,$1)]
      [(sym) `(@sym ,$1)]
-     [(id lparen exprs rparen) `(@app ,$1 ,$3)]
+     [(factor lparen exprs rparen) `(@app ,$1 ,$3)]
      [(lparen expr rparen) $2]
      [(lparen tuple rparen) `(@tuple ,@$2)]
      [(lbracket exprs rbracket) `(@list ,@$2)]

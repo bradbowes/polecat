@@ -11,9 +11,6 @@
   (#%module-begin
      form ...))
 
-(define-syntax-rule (@tuple item ...)
-    #(item ...))
-
 (define-syntax-rule (@num num)
   num)
 
@@ -37,6 +34,10 @@
 (define-syntax @lambda
   (syntax-rules (@fun @var)
     [(_ (@fun ((@var id ty) ...) ret) body) (lambda (id ...) body)]))
+
+(define-syntax @tuple
+  (syntax-rules ()
+    [(_ item ...) (list->vector (list item ...))]))
 
 (define-syntax @vardecl
   (syntax-rules (@var)
