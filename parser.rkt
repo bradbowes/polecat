@@ -26,21 +26,21 @@
       [(def defs) (cons $1 $2)]]
     [def
       [(id signature eq expr) `(@fundecl ,(list $1 $2) ,$4)]
-      [(arg eq expr) `(@vardecl ,$1 ,$3)]
+      [(param eq expr) `(@vardecl ,$1 ,$3)]
       [(wildcard eq expr) $3]]
     [proto
-     [(arg) $1]
+     [(param) $1]
      [(id signature) (list $1 $2)]]
     [signature
-     [(args) `(@fun ,$1 ?)]
-     [(args colon id) `(@fun ,$1 ,$3)]]
-    [args
+     [(params) `(@fun ,$1 ?)]
+     [(params colon id) `(@fun ,$1 ,$3)]]
+    [params
      [(lparen rparen) '()]
-     [(lparen arglist rparen) $2]]
-    [arglist
-     [(arg) (list $1)]
-     [(arg comma arglist) (cons $1 $3)]]
-    [arg
+     [(lparen paramlist rparen) $2]]
+    [paramlist
+     [(param) (list $1)]
+     [(param comma paramlist) (cons $1 $3)]]
+    [param
      [(id) `(@var ,$1 ?)]
      [(id colon id) `(@var ,$1 ,$3)]]
     [expr
