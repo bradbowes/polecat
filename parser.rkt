@@ -20,7 +20,7 @@
    (tokens value-tokens tokens)
    (grammar
     [prog
-     [(defs) $1]]
+     [(defs) (cons '@prog $1)]]
     [defs
       [(def) (list $1)]
       [(def defs) (cons $1 $2)]]
@@ -70,25 +70,25 @@
      [(conjunction and comparison) `(and ,$1 ,$3)]]
     [comparison
      [(composition) $1]
-     [(composition eq composition) `(eq? ,$1 ,$3)]
-     [(composition gt composition) `(> ,$1 ,$3)]
-     [(composition ge composition) `(>= ,$1 ,$3)]
-     [(composition lt composition) `(< ,$1 ,$3)]
-     [(composition le composition) `(<= ,$1 ,$3)]
-     [(composition ne composition) `(<> ,$1 ,$3)]]
+     [(composition eq composition) `(@app (@id eq?) (,$1 ,$3))]
+     [(composition gt composition) `(@app (@id >) (,$1 ,$3))]
+     [(composition ge composition) `(@app (@id >=) (,$1 ,$3))]
+     [(composition lt composition) `(@app (@id <) (,$1 ,$3))]
+     [(composition le composition) `(@app (@id <=) (,$1 ,$3))]
+     [(composition ne composition) `(@app (@id <>) (,$1 ,$3))]]
     [composition
      [(sum) $1]
-     [(sum cons composition) `(:: ,$1 ,$3)]]
+     [(sum cons composition) `(@app (@id ::) (,$1 ,$3))]]
     [sum
      [(product) $1]
-     [(sum plus product) `(+ ,$1 ,$3)]
-     [(sum minus product) `(- ,$1 ,$3)]
-     [(sum cat product) `(^ ,$1 ,$3)]]
+     [(sum plus product) `(@app (@id +) (,$1 ,$3))]
+     [(sum minus product) `(@app (@id -) (,$1 ,$3))]
+     [(sum cat product) `(@app (@id ^) (,$1 ,$3))]]
     [product
      [(factor) $1]
-     [(product times factor) `(* ,$1 ,$3)]
-     [(product div factor) `(/ ,$1 ,$3)]
-     [(product mod factor) `(% ,$1 ,$3)]]
+     [(product times factor) `(@app (@id *) (,$1 ,$3))]
+     [(product div factor) `(@app (@id /) (,$1 ,$3))]
+     [(product mod factor) `(@app (id mod) (,$1 ,$3))]]
     [factor
      [(num) `(@num ,$1)]
      [(bool) `(@bool ,$1)]

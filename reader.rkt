@@ -4,7 +4,7 @@
 (define (read-syntax path port)
   (let*
       ((data (polecat-parse port))
-       (module-data `(module polecat-module polecat/reader ,@data)))
+       (module-data `(module polecat-module polecat/reader ,@(cdr data))))
     (datum->syntax #f module-data)))
 
 (define-syntax-rule (module-begin form ...)
