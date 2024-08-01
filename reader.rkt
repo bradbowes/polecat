@@ -14,6 +14,9 @@
 (define-syntax-rule (@num num)
   num)
 
+(define-syntax-rule (@minus x)
+  (- x))
+
 (define-syntax-rule (@bool bool)
   bool)
 
@@ -52,7 +55,7 @@
   (syntax-rules ()
     [(_ (def ...) body) ((lambda () def ... body))]))
 
-(provide @tuple @num @bool @id @string @sym @app @lambda @fundecl @vardecl @let)
+(provide @tuple @num @bool @id @string @sym @app @lambda @fundecl @vardecl @let @minus)
 (provide (rename-out [module-begin #%module-begin]))
 (provide #%top-interaction)
 

@@ -16,7 +16,7 @@
                          (position-line start-pos)
                          (position-col start-pos)))
                 (display "error\n"))))
-   ;(debug "polecat-parser.debug")
+   (debug "polecat-parser.debug")
    (tokens value-tokens tokens)
    (grammar
     [prog
@@ -53,6 +53,7 @@
     [seq
      [(expr) (list $1)]
      [(expr semicolon seq) (cons $1 $3)]]
+     ;[(expr seq) (cons $1 $2)]]
     [clauses
      [(clause) (list $1)]
      [(clause pipe clauses) (cons $1 $3)]]
@@ -90,20 +91,24 @@
      [(product div factor) `(@app (@id /) (,$1 ,$3))]
      [(product mod factor) `(@app (id mod) (,$1 ,$3))]]
     [factor
-     [(num) `(@num ,$1)]
-     [(bool) `(@bool ,$1)]
-     [(id) `(@id ,$1)]
-     [(lparen rparen) '(@unit)]
-     [(string) `(@string ,$1)]
-     [(sym) `(@sym ,$1)]
+     [(atom) $1]
+     [(minus atom) `(@minus ,$2)]
      [(factor lparen exprs rparen) `(@app ,$1 ,$3)]
-     [(lparen expr rparen) $2]
+
      [(lparen tuple rparen) `(@tuple ,@$2)]
      [(lbracket exprs rbracket) `(@list ,@$2)]
      ;[(factor dot id) `(member ,$1 ,$3)]
      [(factor dot num) `(@field ,$1 ,(- $3 1))]
      ;[(factor lbracket expr rbracket) `(@index ,$1 ,$3)]
      ]
+    [atom
+     [(num) `(@num ,$1)]
+     [(bool) `(@bool ,$1)]
+     [(id) `(@id ,$1)]
+     [(lparen rparen) '(@unit)]
+     [(string) `(@string ,$1)]
+     [(sym) `(@sym ,$1)]
+     [(lparen expr rparen) $2]]
     [exprs
      [() '()]
      [(exprlist) $1]]
