@@ -11,7 +11,7 @@
   (define p (open-input-string (~a s)))
   (read p))
 
-(define-tokens value-tokens (id num string bool sym typo))
+(define-tokens value-tokens (id num string bool sym tyvar typo))
 (define-empty-tokens tokens
   (begin eof colon semicolon comma lparen rparen lbracket rbracket pipe mapsto
    cat cons dot eq gt lt ge le ne plus minus times div mod assign
@@ -66,6 +66,7 @@
    ["type" (token-type)]
    [name (token-id (string->symbol lexeme))]
    [(:: "#" name) (token-sym (string->symbol (substring lexeme 1)))]
+   [(:: name "?") (token-tyvar (string->symbol lexeme))]
    [(:* numeric) (token-num (string->number lexeme))]
    [string (token-string (string-decode lexeme))]
    [any-char (token-typo lexeme)]

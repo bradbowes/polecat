@@ -1,7 +1,7 @@
 #lang polecat
 
 (***** testing polecat language *****)
-a = ("Edmonton", "Alberta", 1)
+a = ("first name", "last name", 1)
 b = a.1
 c = a.2
 d = a.3
@@ -57,6 +57,6 @@ fold (f, init, ls) =
    in
       g (init, ls)
 
-sum (ls) = fold (lambda (m, n) -> m + n, 0, ls)
+sum (ls) = fold (lambda (m, n) = m + n, 0, ls)
 
 _ = main ()

@@ -16,7 +16,7 @@
                          (position-line start-pos)
                          (position-col start-pos)))
                 (display "error\n"))))
-   (debug "polecat-parser.debug")
+   ;(debug "polecat-parser.debug")
    (tokens value-tokens tokens)
    (grammar
     [prog
@@ -33,7 +33,7 @@
      [(id signature) (list $1 $2)]]
     [signature
      [(params) `(@fun ,$1 ?)]
-     [(params colon id) `(@fun ,$1 ,$3)]]
+     [(params colon fnty) `(@fun ,$1 ,$3)]]
     [params
      [(lparen rparen) '()]
      [(lparen paramlist rparen) $2]]
@@ -42,18 +42,29 @@
      [(param comma paramlist) (cons $1 $3)]]
     [param
      [(id) `(@var ,$1 ?)]
-     [(id colon id) `(@var ,$1 ,$3)]]
+     [(id colon fnty) `(@var ,$1 ,$3)]]
+    [fnty
+     [(ty) $1]
+     [(ty mapsto fnty) `(@fnty ,$1 ,$3)]]
+    [ty
+     [(id) `(@ty ,$1)]
+     [(tyvar) `(@tyvar ,$1)]
+     [(id of ty) `(@gen ,$1 ,$3)]
+     [(lparen rparen) 'unit]
+     [(lparen tupty rparen) `(@tupty ,@$2)]]
+    [tupty
+     [(fnty comma fnty) (list $1 $3)]
+     [(fnty comma tupty) (cons $1 $3)]]
     [expr
      [(disjunction) $1]
      [(if expr then expr else expr) `(@if ,$2 ,$4 ,$6)]
      [(let defs in expr) `(@let ,$2 ,$4)]
-     [(lambda signature mapsto expr) `(@lambda ,$2 ,$4)]
+     [(lambda signature eq expr) `(@lambda ,$2 ,$4)]
      [(case expr of clauses end) `(@case ,$2 ,$4)]
      [(begin seq end) `(@begin ,@$2)]]
     [seq
      [(expr) (list $1)]
      [(expr semicolon seq) (cons $1 $3)]]
-     ;[(expr seq) (cons $1 $2)]]
     [clauses
      [(clause) (list $1)]
      [(clause pipe clauses) (cons $1 $3)]]
@@ -94,7 +105,6 @@
      [(atom) $1]
      [(minus atom) `(@minus ,$2)]
      [(factor lparen exprs rparen) `(@app ,$1 ,$3)]
-
      [(lparen tuple rparen) `(@tuple ,@$2)]
      [(lbracket exprs rbracket) `(@list ,@$2)]
      ;[(factor dot id) `(member ,$1 ,$3)]
