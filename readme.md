@@ -2,6 +2,6 @@
 
 Installation:
 
-    > cd path/to/bf
+    > cd path/to/polecat
     > raco pkg install
 
