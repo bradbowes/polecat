@@ -47,9 +47,9 @@
      [(ty) $1]
      [(ty mapsto fnty) `(@fnty ,$1 ,$3)]]
     [ty
-     [(id) `(@ty ,$1)]
+     [(id) `(@tyid ,$1)]
      [(tyvar) `(@tyvar ,$1)]
-     [(id of ty) `(@gen ,$1 ,$3)]
+     [(id of ty) `(@tydat ,$1 ,$3)]
      [(lparen rparen) 'unit]
      [(lparen tupty rparen) `(@tupty ,@$2)]]
     [tupty
