@@ -38,9 +38,11 @@
   (syntax-rules (@fun @var)
     [(_ (@fun ((@var id ty) ...) ret) body) (lambda (id ...) body)]))
 
+#|
 (define-syntax @tuple
   (syntax-rules ()
     [(_ item ...) (list->vector (list item ...))]))
+|#
 
 (define-syntax @vardecl
   (syntax-rules (@var)
@@ -55,7 +57,7 @@
   (syntax-rules ()
     [(_ (def ...) body) ((lambda () def ... body))]))
 
-(provide @tuple @num @bool @id @string @sym @app @lambda @fundecl @vardecl @let @minus)
+(provide #|@tuple|# @num @bool @id @string @sym @app @lambda @fundecl @vardecl @let @minus)
 (provide (rename-out [module-begin #%module-begin]))
 (provide #%top-interaction)
 
@@ -66,7 +68,7 @@
                      [null? empty]
                      [cons ::]
                      [string-append ^]
-                     [vector-ref @field]
+                     ;[vector-ref @field]
                      [if @if]
                      [begin @begin]
                      [list @list]))

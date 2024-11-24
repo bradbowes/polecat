@@ -1,62 +1,59 @@
 #lang polecat
 
 (***** testing polecat language *****)
-a = ("first name", "last name", 1)
-b = a.1
-c = a.2
-d = a.3
+
+main() = (
+   println(m);
+   println("Testing Polecat Language\n" ^
+           "------------------------");
+   println("\nbignum:");
+   println(pow(2, 100));
+   println("\nrecursion, nested procedure:");
+
+   let ls = fibs(50) in (
+      println(ls);
+      println("\nlambda, higher order procedure:");
+      println(sum(ls))
+   )
+)
 
 m = let
        a = 10
        b = 20
     in
-       a + b
+       (a + b) * a
 
-main () = begin
-   println ("Testing Polecat Language\n" ^
-            "------------------------");
-   println ("\nbignum:");
-   println (pow (2, 100));
-   println ("\nrecursion, nested procedure:");
-
-   let ls = fibs (50) in begin
-      println (ls);
-      println ("\nlambda, higher order procedure:");
-      println (sum (ls))
-   end
-end
-
-pow (m, n) =
+pow(m, n) =
    if n = 0 then 1
-   else m * pow (m, n - 1)
+   else m * pow(m, n - 1)
 
-fibs (n) =
+fibs(n) =
    let
-      f (c, acc) =
+      f(c, acc) =
          if c > n then acc
-         else if c >= 2 then f (c + 1, first (acc) + second (acc) :: acc)
-         else f (c + 1, c :: acc)
+         else if c >= 2 then f(c + 1, first(acc) + second(acc) :: acc)
+         else f(c + 1, c :: acc)
    in
-      reverse (f (0, []))
+      reverse(f(0, []))
 
-second (ls) = first (rest (ls))
+second(ls) = first(rest(ls))
 
-reverse (ls) =
+reverse(ls) =
    let
-      f (ls, acc) =
-         if empty (ls) then acc
-         else f (rest (ls), first (ls) :: acc)
+      f(ls, acc) =
+         if empty(ls) then acc
+         else f(rest(ls), first(ls) :: acc)
    in
-      f (ls, [])
+      f(ls, [])
 
-fold (f, init, ls) =
+fold(f, init, ls) =
    let
-      g (acc, ls) =
-         if empty (ls) then acc
-         else g (f (first (ls), acc), rest(ls))
+      g(acc, ls) =
+         if empty(ls) then acc
+         else g(f(first(ls), acc), rest(ls))
    in
-      g (init, ls)
+      g(init, ls)
 
-sum (ls) = fold (lambda (m, n) = m + n, 0, ls)
+sum(ls) = fold(lambda (m, n) = m + n, 0, ls)
 
-_ = main ()
+_ = main()
