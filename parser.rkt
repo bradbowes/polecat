@@ -50,19 +50,13 @@
      [(id) `(@tyid ,$1)]
      [(tyvar) `(@tyvar ,$1)]
      [(id of ty) `(@tydat ,$1 ,$3)]
-     [(lparen rparen) 'unit]
-     [(lparen tupty rparen) `(@tupty ,@$2)]]
-    [tupty
-     [(fnty comma fnty) (list $1 $3)]
-     [(fnty comma tupty) (cons $1 $3)]]
+     [(lparen rparen) 'unit]]
     [expr
      [(disjunction) $1]
      [(if expr then expr else expr) `(@if ,$2 ,$4 ,$6)]
      [(let defs in expr) `(@let ,$2 ,$4)]
      [(lambda signature eq expr) `(@lambda ,$2 ,$4)]
-     [(case expr of clauses end) `(@case ,$2 ,$4)]
-     ;[(begin seq end) `(@begin ,@$2)]]
-     ]
+     [(case expr of clauses end) `(@case ,$2 ,$4)]]
     [clauses
      [(clause) (list $1)]
      [(clause pipe clauses) (cons $1 $3)]]
@@ -103,12 +97,7 @@
      [(atom) $1]
      [(minus atom) `(@minus ,$2)]
      [(factor lparen exprs rparen) `(@app ,$1 ,$3)]
-     ;[(lparen tuple rparen) `(@tuple ,@$2)]
-     [(lbracket exprs rbracket) `(@list ,@$2)]
-     ;[(factor dot id) `(member ,$1 ,$3)]
-     ;[(factor dot num) `(@field ,$1 ,(- $3 1))]
-     ;[(factor lbracket expr rbracket) `(@index ,$1 ,$3)]
-     ]
+     [(lbracket exprs rbracket) `(@list ,@$2)]]
     [atom
      [(num) `(@num ,$1)]
      [(bool) `(@bool ,$1)]
@@ -124,9 +113,6 @@
     [exprlist
      [(expr) (list $1)]
      [(expr comma exprlist) (cons $1 $3)]]
-    ;[tuple
-    ; [(expr comma expr) (list $1 $3)]
-    ; [(expr comma tuple) (cons $1 $3)]]
     [seq
      [(expr semicolon expr) (list $1 $3)]
      [(expr semicolon seq) (cons $1 $3)]]
